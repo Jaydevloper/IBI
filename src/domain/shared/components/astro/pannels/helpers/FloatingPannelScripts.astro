@@ -1,0 +1,61 @@
+---
+const { id } = Astro.props;
+---
+
+<script is:inline defer define:vars={{ id }}>
+  function initFloatPannel() {
+    const floatingPanel = document.querySelector(`[data-id='${id}']`);
+    const floatingPanelNav = document.querySelector(`[data-id='${id}-nav']`);
+    const floatingPanelClose = document.querySelectorAll(
+      `[data-id='${id}-close']`
+    );
+    const floatingPanelResize = document.querySelector(
+      `[data-id='${id}-resize']`
+    );
+    const floatingPanelMin = document.querySelector(
+      `[data-id='${id}-minimize']`
+    );
+    const floatingPanelContent = document.querySelector(
+      `[data-id='${id}-content']`
+    );
+    let isDragging = false;
+    let offsetX = 0;
+    let offsetY = 0;
+
+    floatingPanelClose.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        floatingPanel?.classList.toggle("open");
+      });
+    });
+    if (!floatingPanel.classList.contains("open")) {
+      floatingPanelResize?.addEventListener("click", () => {
+        floatingPanel?.classList.toggle("resize");
+      });
+      floatingPanelMin?.addEventListener("click", () => {
+        floatingPanelContent?.classList.toggle("close");
+      });
+    }
+    floatingPanelNav?.addEventListener("mousedown", (e) => {
+      isDragging = true;
+      offsetX = e?.clientX - floatingPanel.getBoundingClientRect().left;
+      offsetY = e?.clientY - floatingPanel.getBoundingClientRect().top;
+    });
+
+    document.addEventListener("mousemove", (e) => {
+      if (!isDragging) return;
+      let x = Math.max(e.clientX, 0);
+      let y = Math.max(e.clientY, 0);
+      if (floatingPanel) {
+        floatingPanel.style.left = `${x}px`;
+        floatingPanel.style.top = `${y}px`;
+        floatingPanel.style.transform = "none";
+      }
+    });
+
+    document.addEventListener("mouseup", () => {
+      isDragging = false;
+    });
+  }
+  initFloatPannel();
+  document.addEventListener("astro:after-swap", initFloatPannel);
+</script>

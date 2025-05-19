@@ -1,0 +1,67 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import ModalScripts from "./helpers/ModalScripts.astro";
+
+type Props = HTMLAttributes<"div"> & {
+  btnId: string;
+  id?: string;
+  title?: string;
+  hasClose?: boolean;
+  className?: string;
+};
+const randomUUId = crypto.randomUUID();
+const {
+  id = "default-modal-" + randomUUId,
+  title = "",
+  hasClose = true,
+  className = "",
+  btnId = "",
+  ...props
+} = Astro.props;
+if (!Astro.slots.has("default")) {
+  throw new Error("Default slot is required!");
+}
+---
+
+<Fragment>
+  <div
+    class="fixed inset-0 z-50 flex items-center justify-center bg-opacity-50 content-hidden opacity-0 pointer-events-none transition-all duration-300 [&.open]:opacity-100 [&.open]:pointer-events-auto [&.open]:content-visible"
+    data-id={id}
+    {...props}
+  >
+    <div
+      class={"bg-white rounded-lg p-6 w-full max-w-md " + className}
+      data-id={id + "-content"}
+    >
+      <div
+        class="flex items-center justify-between"
+        class:list={[{ "justify-end": !title }]}
+      >
+        {title ? <h2 class="text-xl font-bold">{title}</h2> : null}
+        {
+          hasClose ? (
+            <button type="button" class="btn-secondary" data-id={btnId}>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            </button>
+          ) : null
+        }
+      </div>
+      <slot />
+    </div>
+  </div>
+</Fragment>
+<ModalScripts id={id} btnId={btnId} />

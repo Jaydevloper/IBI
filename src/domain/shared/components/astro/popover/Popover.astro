@@ -1,0 +1,54 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import PopOverScripts from "./helpers/PopOverScripts.astro";
+
+type Props = HTMLAttributes<"div"> & {
+  id?: string;
+  trigger?: "click" | "hover";
+  title?: string;
+  btnName?: string;
+  btnClassName?: string;
+  className?: string;
+};
+const randomUUId = crypto.randomUUID();
+const {
+  id = "default-popover-" + randomUUId,
+  className = "",
+  trigger = "hover",
+  title = "",
+  btnName = "Open",
+  btnClassName = "",
+  ...props
+} = Astro.props;
+if (!Astro.slots.has("default")) {
+  throw new Error("Default slot is required!");
+}
+---
+
+<Fragment>
+  <div class="relative">
+    <button
+      class={"btn-secondary " + btnClassName}
+      type="button"
+      data-id={id + "-btn"}
+    >
+      {btnName}
+    </button>
+    <div
+      class={"fixed left-0 right-0 z-50 w-full before:block before:p-1 before:absolute before:left-[calc(50%)] before:top-[-3px] before:w-1 before:bg-gray-700 before:-rotate-45 before:rounded-bl-full flex-col max-w-2xs mx-auto bg-gray-700 text-white rounded-lg justify-center cursor-auto bg-opacity-50 content-hidden opacity-0 pointer-events-none transition-all duration-300 [&.open]:opacity-100 [&.open]:pointer-events-auto [&.open]:content-visible " +
+        className}
+      data-id={id + "-content"}
+      {...props}
+    >
+      {
+        title ? (
+          <h2 class="text-xl font-semibold border-b border-b-slate-600 p-3">
+            {title}
+          </h2>
+        ) : null
+      }
+      <slot />
+    </div>
+  </div>
+</Fragment>
+<PopOverScripts id={id} trigger={trigger} />

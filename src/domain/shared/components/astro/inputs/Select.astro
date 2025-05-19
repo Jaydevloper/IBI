@@ -1,0 +1,97 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import SelectScripts from "./helpers/SelectScripts.astro";
+
+type Props = HTMLAttributes<"button"> & {
+  label: string;
+  options: {
+    item: string | astroHTML.JSX.Element;
+    disabled?: boolean;
+    selected?: boolean;
+  }[];
+  onChange?: (v: string) => void;
+  id?: string;
+  className?: string;
+};
+const randomId = crypto.randomUUID();
+const {
+  id = "default-select-" + randomId,
+  className = "",
+  label = "",
+  options = [],
+  onChange = () => {},
+  ...props
+} = Astro.props;
+---
+
+<Fragment>
+  <div class={"relative w-full max-w-42 " + className}>
+    <button
+      type="button"
+      class="border w-full border-gray-300 rounded-md flex items-center justify-between py-1 px-3 text-lg"
+      data-id={id}
+      {...props}
+    >
+      <span class="text-base">{label}</span>
+      <svg
+        class="text-gray-800 dark:text-white"
+        aria-hidden="true"
+        xmlns="http://www.w3.org/2000/svg"
+        width="18"
+        height="18"
+        fill="none"
+        viewBox="0 0 24 24"
+      >
+        <path
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="m19 9-7 7-7-7"></path>
+      </svg>
+    </button>
+    <ul
+      class="absolute w-full translate-y-1.5 border border-gray-300 rounded-md flex flex-col gap-1 p-1 content-hidden pointer-events-none origin-top duration-300 opacity-0 scale-y-0 transition-all [&.open]:pointer-events-auto [&.open]:opacity-100 [&.open]:scale-y-100 [&.open]:content-visible"
+      data-id={id + "-content"}
+    >
+      {
+        options?.map((props) => (
+          <li
+            class="hover:bg-gray-400 rounded cursor-pointer transition-colors duration-200 py-1  text-base flex items-center gap-1"
+            class:list={[
+              { "bg-gray-400": props?.selected && !props?.disabled },
+              {
+                "text-gray-500 cursor-not-allowed! hover:bg-transparent":
+                  props?.disabled,
+              },
+            ]}
+            data-selected={props?.selected}
+            data-disabled={props?.disabled}
+          >
+            <span class="invisible">
+              <svg
+                class="text-gray-800 dark:text-white "
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                width="18"
+                height="18"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M5 11.917 9.724 16.5 19 7.5"
+                />
+              </svg>
+            </span>
+            {props?.item}
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</Fragment>
+<SelectScripts id={id} onChange={onChange} />

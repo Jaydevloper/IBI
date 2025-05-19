@@ -1,0 +1,95 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import FloatingPannelScripts from "./helpers/FloatingPannelScripts.astro";
+
+type Props = HTMLAttributes<"div"> & {
+  id?: string;
+  className?: string;
+  title?: string;
+};
+const randomUUId = crypto.randomUUID();
+const {
+  id = "default-floating-panel-" + randomUUId,
+  title = "",
+  className = "",
+  ...props
+} = Astro.props;
+if (!Astro.slots.has("default")) {
+  throw new Error("Default slot is required!");
+}
+---
+
+<Fragment>
+  <div
+    class={"fixed top-10 left-1/2 transform -translate-x-1/2 -translate-y-1/10 rounded-lg w-full max-w-xl transition-opacity opacity-0 pointer-events-none content-hidden duration-300 [&.open]:opacity-100 [&.open]:pointer-events-auto [&.open]:content-visible [&.resize]:max-w-[initial] [&.resize]:h-full [&.resize]:pt-9 " +
+      className}
+    data-id={id}
+    {...props}
+  >
+    <nav
+      class="bg-white text-dark p-6 border-b border-b-gray-400 flex items-center justify-between cursor-move select-none"
+      data-id={id + "-nav"}
+    >
+      {title ? <h1 class="text-2xl font-bold">{title}</h1> : null}
+      <section class="flex items-center gap-4">
+        <button class="btn-primary" data-id={id + "-minimize"}>
+          <svg
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M5 12h14"></path>
+          </svg>
+        </button>
+        <button class="btn-secondary" data-id={id + "-resize"}>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M4 4h16v16H4V4z"></path>
+          </svg>
+        </button>
+        <button class="btn-danger" data-id={id + "-close"}>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+      </section>
+    </nav>
+    <div
+      class="opacity-100 p-4 bg-white text-gray-800 pointer-events-auto content-visible transition-opacity duration-300 [&.close]:opacity-0 [&.close]:pointer-events-none [&.close]:content-hidden"
+      data-id={id + "-content"}
+    >
+      <slot />
+    </div>
+  </div>
+  <button class="btn-" data-id={id + "-close"}> Show Floating Panel </button>
+</Fragment>
+<FloatingPannelScripts id={id} />

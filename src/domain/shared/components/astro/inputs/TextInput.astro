@@ -1,0 +1,36 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import TextInputScripts from "./helpers/TextInputScripts.astro";
+
+type Props = HTMLAttributes<"input"> & {
+  id?: string;
+  label?: string;
+  className?: string;
+};
+const randomUUID = crypto.randomUUID();
+const {
+  id = "default-text-input-" + randomUUID,
+  label = "",
+  className = "",
+  ...props
+} = Astro.props;
+---
+
+<Fragment>
+  <div class="relative">
+    <input
+      type="text"
+      id={id}
+      class={"peer h-10 w-full  rounded-lg border border-gray-300 bg-gray-50 px-3 py-2 text-sm text-gray-900 placeholder-transparent focus:border-blue-500 focus:outline-none focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500 " +
+        className}
+      {...props}
+    />
+    <label
+      for={id}
+      class="absolute left-3 top-2.5 origin-[0_0] -translate-y-top-3 scale-[0.8] transform text-sm text-gray-500 transition-all duration-200 peer-placeholder-shown:left-3 peer-placeholder-shown:top-2.5 peer-placeholder-shown:scale-[1] peer-placeholder-shown:text-base peer-focus:left-[12px] peer-focus:-top-3.5 peer-focus:scale-[0.8] peer-focus:text-sm peer-[&.has-value]:-top-3.5"
+    >
+      {label}
+    </label>
+  </div>
+</Fragment>
+<TextInputScripts id={id} />

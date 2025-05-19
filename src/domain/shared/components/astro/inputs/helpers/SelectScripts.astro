@@ -1,0 +1,47 @@
+---
+type Props = {
+  onChange: (v: string) => void;
+  id: string;
+};
+const { id, onChange } = Astro.props;
+---
+
+<script is:inline defer define:vars={{ id, onChange }}>
+  function initSelect() {
+    const selectButton = document.querySelector(`[data-id='${id}']`);
+    const selectContent = document.querySelector(`[data-id='${id}-content']`);
+    const selectedOption = selectContent?.querySelectorAll("li");
+    selectButton?.addEventListener("click", () => {
+      selectContent?.classList.toggle("open");
+    });
+    selectedOption?.forEach((option) => {
+      if (option?.dataset?.selected === "true" && !option?.dataset?.selected) {
+        selectedOption[
+          selectedOption?.length - 1
+        ]?.children[0]?.classList?.remove("invisible");
+        selectButton.children[0].textContent = option?.textContent;
+      }
+    });
+    selectContent?.addEventListener("click", (e) => {
+      if (e?.target?.tagName === "LI" && !e?.target?.dataset?.disabled) {
+        const selectedOption = e.target?.children[0];
+        const allSpans = selectContent.querySelectorAll("span");
+        allSpans.forEach((span) => {
+          if (span !== selectedOption) {
+            span.classList.add("invisible");
+          }
+        });
+        if (selectButton.children[0]) {
+          selectButton.children[0].textContent = e?.target?.textContent;
+          if (onChange) {
+            onChange(e?.target?.textContent);
+          }
+        }
+        selectedOption?.classList?.toggle("invisible");
+        selectContent?.classList.remove("open");
+      }
+    });
+  }
+  initSelect();
+  document.addEventListener("astro:after-swap", initSelect);
+</script>

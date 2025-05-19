@@ -1,0 +1,28 @@
+@import "tailwindcss";
+@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
+
+@layer base {
+  button{
+    @apply cursor-pointer;
+  }
+}
+@layer components {
+  .btn-primary {
+    @apply bg-blue-800  text-white  text-base text-center font-bold py-1 px-2 rounded;
+  }
+  .btn-secondary {
+    @apply bg-gray-800 text-white text-base text-center font-bold py-1 px-2 rounded;
+  }
+  .btn-danger {
+    @apply bg-red-800 text-white text-base text-center font-bold py-1 px-2 rounded;
+  }
+}
+  @utility content-auto{
+    content-visibility: auto;
+  }
+  @utility content-hidden{
+    content-visibility: hidden;
+  }
+  @utility content-visible{
+    content-visibility: visible;
+  }

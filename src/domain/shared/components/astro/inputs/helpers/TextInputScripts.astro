@@ -1,0 +1,19 @@
+---
+const { id } = Astro.props;
+---
+
+<script is:inline defer define:vars={{ id }}>
+  function initTextInput() {
+    const input = document.querySelector(`input#${id}`);
+    input.addEventListener("input", (e) => {
+      const target = e.target;
+      if (target.value.length > 0) {
+        target.classList.add("has-value");
+      } else {
+        target.classList.remove("has-value");
+      }
+    });
+  }
+  initTextInput();
+  document.addEventListener("astro:after-swap", initTextInput);
+</script>

@@ -1,0 +1,51 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import AccordionScripts from "./helpers/AccordionScripts.astro";
+
+type Props = HTMLAttributes<"button"> & {
+  title: string;
+  id?: string;
+  className?: string;
+};
+const randomId = crypto.randomUUID();
+const { id = randomId, className = "", title = "", ...props } = Astro.props;
+if (!Astro.slots.has("default")) {
+  throw new Error("Default slot is required!");
+}
+---
+
+<Fragment>
+  <div class={"w-full max-w-lg " + className}>
+    <button
+      class="text-lg font-semibold rounded-lg w-full flex items-center justify-between px-3 py-4 border dark:border-white dark:text-white [&.open]:rounded-b-none [&.open>svg]:rotate-180"
+      type="button"
+      data-accardion={`default-accardion-${id}`}
+      {...props}
+    >
+      {title}
+      <svg
+        class="w-6 h-6 text-gray-800 dark:text-white rotate-0 transition-transform duration-300"
+        aria-hidden="true"
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        fill="none"
+        viewBox="0 0 24 24"
+      >
+        <path
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="m19 9-7 7-7-7"></path>
+      </svg>
+    </button>
+    <summary
+      class="[&.open]:content-visible [&.open]:opacity-100 [&.open]:scale-y-100 [&.open]:pointer-events-auto scale-y-0 origin-top content-hidden opacity-0 pointer-events-none transition-all duration-300 border border-t-0 rounded-t-none rounded-lg dark:border-white dark:bg-gray-700 list-none"
+      data-accardion={`default-accardion-content-${id}`}
+    >
+      <slot />
+    </summary>
+  </div>
+</Fragment>
+<AccordionScripts id={id} />

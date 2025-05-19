@@ -1,0 +1,48 @@
+---
+import TabsScript from "./helpers/TabsScript.astro";
+
+const randomUUID = crypto.randomUUID();
+type Props = {
+  tabs: {
+    id: string;
+    label: string;
+    checked?: boolean;
+    disabled?: boolean;
+  }[];
+  id?: string;
+  className?: string;
+};
+const { id = randomUUID, tabs = [], className = "", ...props } = Astro.props;
+---
+
+<Fragment>
+  <div class={"relative flex gap-4 bg-gray-400 p-3 rounded-xl " + className}>
+    {
+      tabs?.map((item, index) => (
+        <label
+          for={item?.id}
+          class={`relative z-10 rounded-xl  has-disabled:bg-gray-600 has-disabled:text-gray-500 has-checked:text-white  px-12 py-3 text-base font-semibold cursor-pointer w-36 text-center transition-all duration-300`}
+        >
+          <input
+            id={`${item?.id}`}
+            type="radio"
+            name="status"
+            class={` hidden`}
+            checked={item?.checked ?? index === 0}
+            disabled={item?.disabled}
+            {...props}
+          />
+          {item?.label}
+        </label>
+      ))
+    }
+    <div
+      class="absolute bottom-1.5 left-0 h-4/5 rounded-xl bg-indigo-500 transition-transform duration-300"
+      style="width: calc(25%);"
+      data-id={id + "-indicator"}
+    >
+    </div>
+  </div>
+</Fragment>
+
+<TabsScript id={id} />

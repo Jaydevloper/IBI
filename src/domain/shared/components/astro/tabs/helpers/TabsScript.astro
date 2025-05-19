@@ -1,0 +1,25 @@
+---
+const { id } = Astro.props;
+---
+
+<script is:inline defer define:vars={{ id }}>
+  function initTabs() {
+    const tabs = document.querySelectorAll('input[name="status"]');
+    const indicator = document.querySelector(`[data-id='${id}-indicator']`);
+    if (indicator instanceof HTMLElement) {
+      indicator.style.width = `${100 / tabs.length}%`;
+    }
+    tabs.forEach((tab, index) => {
+      if (tab.checked && !tab.disabled) {
+        indicator.style.transform = `translateX(${index * 100}%)`;
+      }
+      tab.addEventListener("change", () => {
+        if (indicator instanceof HTMLElement) {
+          indicator.style.transform = `translateX(${index * 100}%)`;
+        }
+      });
+    });
+  }
+  initTabs();
+  document.addEventListener("astro:after-swap", initTabs);
+</script>

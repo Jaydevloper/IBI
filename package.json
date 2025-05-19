@@ -1,0 +1,33 @@
+{
+  "name": "ibi",
+  "version": "0.0.1",
+  "type": "module",
+  "exports": {
+    "./accordion": "./dist/domain/shared/components/astro/accordions/index.js",
+    "./card": "./dist/domain/shared/components/astro/cards/index.js",
+    "./carousel": "./dist/domain/shared/components/astro/carousels/index.js",
+    "./context-menu": "./dist/domain/shared/components/astro/context-menu/index.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "peerDependencies": {
+    "astro": "^5.0.0"
+  },
+  "scripts": {
+    "build:accordion": "mkdir -p dist/domain/shared/components/astro/accordions && cp src/domain/shared/components/astro/accordions/Accordion.astro dist/domain/shared/components/astro/accordions/ && echo \"export { default } from './Accordion.astro'\" > dist/domain/shared/components/astro/accordions/index.js",
+    "build:card": "mkdir -p dist/domain/shared/components/astro/cards && cp src/domain/shared/components/astro/cards/Card.astro dist/domain/shared/components/astro/cards/ && echo \"export { default } from './Card.astro'\" > dist/domain/shared/components/astro/cards/index.js",
+    "build:carousel": "mkdir -p dist/domain/shared/components/astro/carousels && cp src/domain/shared/components/astro/carousels/MultiCarousel.astro dist/domain/shared/components/astro/carousels/ && echo \"export { default } from './MultiCarousel.astro'\" > dist/domain/shared/components/astro/carousels/index.js",
+    "build:context-menu": "mkdir -p dist/domain/shared/components/astro/context-menu && cp src/domain/shared/components/astro/context-menu/ContextMenu.astro dist/domain/shared/components/astro/context-menu/ && echo \"export { default } from './ContextMenu.astro'\" > dist/domain/shared/components/astro/context-menu/index.js",
+    "dev": "astro dev",
+    "build": "npm run build:accordion && npm run build:card && npm run build:carousel && npm run build:context-menu ",
+    "compress": "astro-compressor",
+    "prepare": "npm run build && npm run compress"
+  },
+  "dependencies": {
+    "@astrojs/node": "^9.2.1",
+    "@tailwindcss/vite": "^4.1.7",
+    "astro-compressor": "^1.0.0",
+    "tailwindcss": "^4.1.7"
+  }
+}

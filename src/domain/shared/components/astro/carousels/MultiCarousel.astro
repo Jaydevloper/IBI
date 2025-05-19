@@ -1,0 +1,45 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import MultiCarouselScripts from "./helpers/MultiCarouselScripts.astro";
+type Props = HTMLAttributes<"ul"> & {
+  cards: { item: string | astroHTML.JSX.Element; index?: number }[];
+  id?: string;
+  className?: string;
+};
+const randomId = crypto.randomUUID();
+const {
+  id = "default-carousel-" + randomId,
+  className = "",
+  cards = [],
+  ...props
+} = Astro.props;
+---
+
+<div class="w-full container mx-auto pt-24" id={id + "-wrapper"}>
+  <button
+    type="button"
+    id={id + "-prev"}
+    class="bg-gray-400 rounded-xl p-3 mb-3">Prev</button
+  >
+  <ul
+    id={id}
+    class={"grid grid-flow-col gap-2 overflow-x-auto border border-gray-300 p-2 scroll-smooth snap-mandatory snap-x " +
+      className}
+    style="scrollbar-width: none;"
+    {...props}
+  >
+    {
+      cards?.map((itemProps) => (
+        <li id={id + "-card"} class="bg-gray-600  p-5 h-44 snap-start ">
+          {itemProps?.item}
+        </li>
+      ))
+    }
+  </ul>
+  <button
+    type="button"
+    id={id + "-next"}
+    class="bg-gray-400 rounded-xl p-3 mt-3">Next</button
+  >
+</div>
+<MultiCarouselScripts id={id} />

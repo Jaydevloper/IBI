@@ -1,0 +1,46 @@
+---
+type Props = {
+  id: string;
+  trigger: "click" | "hover";
+};
+const { id, trigger = "hover" } = Astro.props;
+---
+
+<script is:inline defer define:vars={{ id, trigger }}>
+  function initPopOver() {
+    const popoverBtn = document?.querySelector(`[data-id='${id}-btn']`);
+    const popover = document?.querySelector(`[data-id='${id}-content']`);
+    if (trigger === "click") {
+      const clickOutSide = (e) => {
+        if (
+          !popoverBtn.contains(e.target) &&
+          popover &&
+          !popover.contains(e.target)
+        ) {
+          console.log("click");
+          popover?.classList.remove("open");
+          document.removeEventListener("click", clickOutSide);
+        }
+      };
+      popoverBtn?.addEventListener("click", () => {
+        popover?.classList.toggle("open");
+        document.addEventListener("click", clickOutSide);
+      });
+    } else {
+      popoverBtn?.addEventListener("mouseover", () => {
+        popover?.classList.add("open");
+        document.addEventListener("mouseover", (e) => {
+          if (
+            !popoverBtn.contains(e.target) &&
+            popover &&
+            !popover.contains(e.target)
+          ) {
+            popover?.classList.remove("open");
+          }
+        });
+      });
+    }
+  }
+  initPopOver();
+  document.addEventListener("astro:after-swap", initPopOver);
+</script>

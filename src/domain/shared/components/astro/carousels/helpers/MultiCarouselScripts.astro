@@ -1,0 +1,46 @@
+---
+const { id } = Astro.props;
+---
+
+<script is:inline defer define:vars={{ id }}>
+  function initCarousel() {
+    const carousel = document.querySelector(`#${id}`);
+    const buttons = document.querySelectorAll(`#${id}-wrapper button`);
+    const firstCardwith = document.querySelector(`#${id}-card`).offsetWidth;
+    const carouselChildrens = [...carousel.children];
+    let cardPreview = Math.round(carousel.offsetWidth / firstCardwith);
+
+    carouselChildrens
+      .slice(-cardPreview)
+      .reverse()
+      .forEach((child) => {
+        carousel.insertAdjacentHTML("afterbegin", child.outerHTML);
+      });
+
+    carouselChildrens.slice(0, cardPreview).forEach((child) => {
+      carousel.insertAdjacentHTML("beforeend", child.outerHTML);
+    });
+    carousel.addEventListener("scroll", () => {
+      if (Math.ceil(carousel.scrollLeft) === 8) {
+        carousel.classList.add("!scroll-auto");
+        carousel.scrollLeft = carousel.scrollWidth - 2 * carousel.offsetWidth;
+        carousel.classList.remove("!scroll-auto");
+      } else if (
+        Math.ceil(carousel.scrollLeft) >=
+        carousel.scrollWidth - carousel.offsetWidth
+      ) {
+        carousel.classList.add("!scroll-auto");
+        carousel.scrollLeft = carousel.offsetWidth;
+        carousel.classList.remove("!scroll-auto");
+      }
+    });
+    buttons.forEach((button) => {
+      button.addEventListener("click", () => {
+        carousel.scrollLeft +=
+          button.id === id + "-prev" ? -firstCardwith : firstCardwith;
+      });
+    });
+  }
+  initCarousel();
+  document.addEventListener("astro:after-swap", initCarousel);
+</script>
