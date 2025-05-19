@@ -21,7 +21,6 @@
     "build:context-menu": "mkdir -p dist/domain/shared/components/astro/context-menu && cp src/domain/shared/components/astro/context-menu/ContextMenu.astro dist/domain/shared/components/astro/context-menu/ && echo \"export { default } from './ContextMenu.astro'\" > dist/domain/shared/components/astro/context-menu/index.js",
     "dev": "astro dev",
     "build": "npm run build:accordion && npm run build:card && npm run build:carousel && npm run build:context-menu ",
-    "compress": "astro-compressor",
     "prepare": "npm run build && npm run compress"
   },
   "dependencies": {
