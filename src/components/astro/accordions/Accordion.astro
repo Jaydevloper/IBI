@@ -1,6 +1,5 @@
 ---
 import type { HTMLAttributes } from "astro/types";
-import AccordionScripts from "./helpers/AccordionScripts.astro";
 
 type Props = HTMLAttributes<"button"> & {
   title: string;
@@ -48,4 +47,26 @@ if (!Astro.slots.has("default")) {
     </summary>
   </div>
 </Fragment>
-<AccordionScripts id={id} />
+<script is:inline defer define:vars={{ id }}>
+  function initAccordion() {
+    const btn = document.querySelectorAll(
+      `[data-accardion='default-accardion-${id}']`
+    );
+    const content = document.querySelector(
+      `[data-accardion='default-accardion-content-${id}']`
+    );
+    btn.forEach((button) => {
+      button?.addEventListener("click", (e) => {
+        document.querySelectorAll("[data-accardion]").forEach((otherBtn) => {
+          if (otherBtn !== button && otherBtn !== content) {
+            otherBtn.classList.remove("open");
+          }
+        });
+        button?.classList.toggle("open");
+        content?.classList.toggle("open");
+      });
+    });
+  }
+  initAccordion();
+  document.removeEventListener("astro:after-swap", initAccordion);
+</script>

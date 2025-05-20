@@ -1,6 +1,6 @@
-# 🧩 ibi
+# 🧩 ibi-voy
 
-`ibi` — bu Astro uchun yaratilgan mustaqil UI komponentlar kutubxonasi. Har bir komponentni alohida import qilish mumkin (`tree-shakable`).
+`ibi-voy` — bu Astro uchun yaratilgan mustaqil UI komponentlar kutubxonasi. Har bir komponentni alohida import qilish mumkin (`tree-shakable`).
 
 ## ✨ Xususiyatlar
 
@@ -15,15 +15,9 @@
 ## 🔧 O‘rnatish
 
 ```bash
-pnpm add ibi
+pnpm add ibi-voy
 # yoki
-npm install ibi
+npm install ibi-voy
 
 
-ibi/
-├── src/
-│   └── domain/shared/components/astro/
-│       ├── accordions/Accordion.astro
-│       ├── cards/Card.astro
-│       ├── carousels/MultiCarousel.astro
-│       └── context-menu/ContextMenu.astro
+

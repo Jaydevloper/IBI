@@ -19,14 +19,6 @@ export default defineConfig({
       fileExtensions: [".css", ".js", ".html", ".mjs", ".svg"],
     }),
   ],
-  i18n: {
-    defaultLocale: "uz",
-    locales: ["uz", "en", "ru"],
-    routing: {
-      prefixDefaultLocale: true,
-      redirectToDefaultLocale: true,
-    },
-  },
   vite: {
     plugins: [tailwindcss()],
   },

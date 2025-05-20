@@ -1,6 +1,4 @@
 ---
-import ConTextMenuScripts from "./helpers/ConTextMenuScripts.astro";
-
 type Props = {
   id?: string;
   title?: string;
@@ -35,4 +33,21 @@ if (!Astro.slots.has("default")) {
     </ul>
   </div>
 </Fragment>
-<ConTextMenuScripts id={id} />
+<script is:inline defer define:vars={{ id }}>
+  function initConTextMenu() {
+    const contextMenu = document.querySelector(`[data-id='${id}']`);
+    const contextMenuList = document.querySelector(`[data-id='${id}-list']`);
+    contextMenu?.addEventListener("contextmenu", (e) => {
+      e.preventDefault();
+      let x = e?.offsetX;
+      let y = e?.offsetY;
+      if (contextMenuList instanceof HTMLElement) {
+        contextMenuList.style.left = `${x}px`;
+        contextMenuList.style.top = `${y}px`;
+        contextMenuList.classList.toggle("open");
+      }
+    });
+  }
+  initConTextMenu();
+  document.addEventListener("astro:after-swap", initConTextMenu);
+</script>
